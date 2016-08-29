@@ -60,10 +60,9 @@ public class CrimeFragment extends Fragment {
             }
         });
 
-        String dateString = DateFormat.format("E, MMMM d, yyyy", crime.getDate()).toString();
         crimeDateButton = (Button) rootView.findViewById(R.id.crime_date);
         crimeDateButton.setEnabled(false);
-        crimeDateButton.setText(dateString);
+        crimeDateButton.setText(crime.getDateString());
 
         solvedCheckbox = (CheckBox) rootView.findViewById(R.id.crime_solved);
         solvedCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

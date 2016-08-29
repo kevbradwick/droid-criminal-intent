@@ -1,5 +1,7 @@
 package kodefoundry.com.criminalintent.model;
 
+import android.text.format.DateFormat;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -33,6 +35,10 @@ public class Crime {
 
     public Date getDate() {
         return date;
+    }
+
+    public String getDateString() {
+        return DateFormat.format("E, MMMM d, yyyy", getDate()).toString();
     }
 
     public boolean isSolved() {
