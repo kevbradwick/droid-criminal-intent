@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+
+import java.text.SimpleDateFormat;
 
 import kodefoundry.com.criminalintent.R;
 import kodefoundry.com.criminalintent.model.Crime;
@@ -57,9 +60,10 @@ public class CrimeFragment extends Fragment {
             }
         });
 
+        String dateString = DateFormat.format("E, MMMM d, yyyy", crime.getDate()).toString();
         crimeDateButton = (Button) rootView.findViewById(R.id.crime_date);
         crimeDateButton.setEnabled(false);
-        crimeDateButton.setText(crime.getDate().toString());
+        crimeDateButton.setText(dateString);
 
         solvedCheckbox = (CheckBox) rootView.findViewById(R.id.crime_solved);
         solvedCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
