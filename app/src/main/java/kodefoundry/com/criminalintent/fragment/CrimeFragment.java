@@ -25,18 +25,25 @@ import kodefoundry.com.criminalintent.model.CrimeLab;
 
 public class CrimeFragment extends Fragment {
 
-    public static final String FRAGMENT_TAG = "crime-fragment";
+    private static final String ARG_CRIME_ID = "crime-id";
     private static final String TAG = CrimeFragment.class.getSimpleName();
 
     private Crime crime;
-    private EditText editTextField;
-    private Button crimeDateButton;
-    private CheckBox solvedCheckbox;
+
+    public static CrimeFragment newInstance(UUID crimeId) {
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_CRIME_ID, crimeId);
+
+        CrimeFragment fragment = new CrimeFragment();
+        fragment.setArguments(args);
+
+        return fragment;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UUID crimeId = (UUID) getActivity().getIntent().getSerializableExtra(CrimeActivity.EXTRA_CRIME_ID);
+        UUID crimeId = (UUID) getArguments().getSerializable(CrimeActivity.EXTRA_CRIME_ID);
         crime = CrimeLab.get(getActivity()).getCrime(crimeId);
     }
 
@@ -46,7 +53,7 @@ public class CrimeFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_crime, container, false);
 
         // crime title
-        editTextField = (EditText) rootView.findViewById(R.id.crime_title);
+        EditText editTextField = (EditText) rootView.findViewById(R.id.crime_title);
         editTextField.setText(crime.getTitle());
         editTextField.addTextChangedListener(new TextWatcher() {
             @Override
@@ -65,11 +72,11 @@ public class CrimeFragment extends Fragment {
             }
         });
 
-        crimeDateButton = (Button) rootView.findViewById(R.id.crime_date);
+        Button crimeDateButton = (Button) rootView.findViewById(R.id.crime_date);
         crimeDateButton.setEnabled(false);
         crimeDateButton.setText(crime.getDateString());
 
-        solvedCheckbox = (CheckBox) rootView.findViewById(R.id.crime_solved);
+        CheckBox solvedCheckbox = (CheckBox) rootView.findViewById(R.id.crime_solved);
         solvedCheckbox.setChecked(crime.isSolved());
         solvedCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
