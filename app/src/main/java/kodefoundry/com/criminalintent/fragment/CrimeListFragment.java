@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,11 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
-import kodefoundry.com.criminalintent.CrimeActivity;
+import kodefoundry.com.criminalintent.CrimePagerActivity;
 import kodefoundry.com.criminalintent.R;
 import kodefoundry.com.criminalintent.model.Crime;
 import kodefoundry.com.criminalintent.model.CrimeLab;
@@ -73,7 +71,7 @@ public class CrimeListFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-            Intent intent = CrimeActivity.newIntent(getContext(), crime.getId());
+            Intent intent = CrimePagerActivity.newIntent(getContext(), crime.getId());
             startActivity(intent);
         }
 
