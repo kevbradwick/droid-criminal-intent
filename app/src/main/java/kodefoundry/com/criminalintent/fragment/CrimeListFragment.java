@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -40,20 +41,28 @@ public class CrimeListFragment extends Fragment {
         crimeRecyclerView.setAdapter(crimeAdapter);
     }
 
-    private class CrimeHolder extends RecyclerView.ViewHolder {
+    private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView titleTextView;
         private TextView crimeDate;
         private CheckBox solvedCheckbox;
+        private Crime crime;
 
         CrimeHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             titleTextView = (TextView) itemView.findViewById(R.id.list_item_crime_title_text_view);
             crimeDate = (TextView) itemView.findViewById(R.id.list_item_crime_date_text_view);
             solvedCheckbox = (CheckBox) itemView.findViewById(R.id.list_item_crime_solved_checkbox);
         }
 
+        @Override
+        public void onClick(View view) {
+            Toast.makeText(getContext(), crime.getTitle() + " Selected", Toast.LENGTH_SHORT).show();
+        }
+
         void bindCrime(Crime crime) {
+            this.crime = crime;
             solvedCheckbox.setChecked(crime.isSolved());
             titleTextView.setText(crime.getTitle());
             crimeDate.setText(crime.getDateString());
