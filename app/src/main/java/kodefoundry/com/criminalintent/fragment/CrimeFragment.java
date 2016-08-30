@@ -16,9 +16,12 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import java.text.SimpleDateFormat;
+import java.util.UUID;
 
+import kodefoundry.com.criminalintent.CrimeActivity;
 import kodefoundry.com.criminalintent.R;
 import kodefoundry.com.criminalintent.model.Crime;
+import kodefoundry.com.criminalintent.model.CrimeLab;
 
 public class CrimeFragment extends Fragment {
 
@@ -33,7 +36,8 @@ public class CrimeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        crime = new Crime();
+        UUID crimeId = (UUID) getActivity().getIntent().getSerializableExtra(CrimeActivity.EXTRA_CRIME_ID);
+        crime = CrimeLab.get(getActivity()).getCrime(crimeId);
     }
 
     @Nullable
@@ -43,6 +47,7 @@ public class CrimeFragment extends Fragment {
 
         // crime title
         editTextField = (EditText) rootView.findViewById(R.id.crime_title);
+        editTextField.setText(crime.getTitle());
         editTextField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -65,6 +70,7 @@ public class CrimeFragment extends Fragment {
         crimeDateButton.setText(crime.getDateString());
 
         solvedCheckbox = (CheckBox) rootView.findViewById(R.id.crime_solved);
+        solvedCheckbox.setChecked(crime.isSolved());
         solvedCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {

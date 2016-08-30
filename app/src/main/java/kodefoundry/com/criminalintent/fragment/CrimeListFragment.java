@@ -1,5 +1,6 @@
 package kodefoundry.com.criminalintent.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import kodefoundry.com.criminalintent.CrimeActivity;
 import kodefoundry.com.criminalintent.R;
 import kodefoundry.com.criminalintent.model.Crime;
 import kodefoundry.com.criminalintent.model.CrimeLab;
@@ -58,7 +60,8 @@ public class CrimeListFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(getContext(), crime.getTitle() + " Selected", Toast.LENGTH_SHORT).show();
+            Intent intent = CrimeActivity.newIntent(getContext(), crime.getId());
+            startActivity(intent);
         }
 
         void bindCrime(Crime crime) {
