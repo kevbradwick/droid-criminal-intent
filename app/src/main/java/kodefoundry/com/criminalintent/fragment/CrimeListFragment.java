@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import kodefoundry.com.criminalintent.model.CrimeLab;
 
 public class CrimeListFragment extends Fragment {
 
+    private static final String TAG = CrimeListFragment.class.getSimpleName();
     private RecyclerView crimeRecyclerView;
     private CrimeAdapter crimeAdapter;
 
@@ -36,11 +38,22 @@ public class CrimeListFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume()");
+        updateUI();
+    }
+
     private void updateUI() {
         CrimeLab crimeLab = CrimeLab.get(getActivity());
         List<Crime> crimes = crimeLab.getCrimes();
-        crimeAdapter = new CrimeAdapter(crimes);
-        crimeRecyclerView.setAdapter(crimeAdapter);
+        if (crimeAdapter == null) {
+            crimeAdapter = new CrimeAdapter(crimes);
+            crimeRecyclerView.setAdapter(crimeAdapter);
+        } else {
+            crimeAdapter.notifyDataSetChanged();
+        }
     }
 
     private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
