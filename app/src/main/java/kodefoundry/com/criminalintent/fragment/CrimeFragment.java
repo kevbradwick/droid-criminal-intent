@@ -1,8 +1,11 @@
 package kodefoundry.com.criminalintent.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
@@ -16,6 +19,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 import kodefoundry.com.criminalintent.CrimeActivity;
@@ -26,9 +30,13 @@ import kodefoundry.com.criminalintent.model.CrimeLab;
 public class CrimeFragment extends Fragment {
 
     private static final String ARG_CRIME_ID = "crime-id";
+    private static final String DIALOG_DATE = "dialog-date";
     private static final String TAG = CrimeFragment.class.getSimpleName();
+    private static final int REQUEST_DATE = 0;
 
     private Crime crime;
+
+    private Button crimeDateButton;
 
     public static CrimeFragment newInstance(UUID crimeId) {
         Bundle args = new Bundle();
@@ -38,6 +46,19 @@ public class CrimeFragment extends Fragment {
         fragment.setArguments(args);
 
         return fragment;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+
+        if (requestCode == REQUEST_DATE) {
+            Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            crime.setDate(date);
+            crimeDateButton.setText(crime.getDateString());
+        }
     }
 
     @Override
@@ -72,9 +93,17 @@ public class CrimeFragment extends Fragment {
             }
         });
 
-        Button crimeDateButton = (Button) rootView.findViewById(R.id.crime_date);
-        crimeDateButton.setEnabled(false);
+        crimeDateButton = (Button) rootView.findViewById(R.id.crime_date);
         crimeDateButton.setText(crime.getDateString());
+        crimeDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = getFragmentManager();
+                DatePickerFragment dpFragment = DatePickerFragment.newInstance(crime.getDate());
+                dpFragment.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
+                dpFragment.show(fm, DIALOG_DATE);
+            }
+        });
 
         CheckBox solvedCheckbox = (CheckBox) rootView.findViewById(R.id.crime_solved);
         solvedCheckbox.setChecked(crime.isSolved());
